@@ -185,17 +185,23 @@ class IsingModel(object):
     """Use bootstrap method to Calculate errors (used for Heat Capacity and Chi)"""
     def bootstrap_error(self, input, input_sqr, mode):
 
+        #List for sample data poins
         values = []
         values_sqr = []
 
+        #Randomly sample 101 times 
         for n in range(101):
+            #Select indices
             samples = [np.random.randint(len(input)) for i in range(len(input))]
+            #Select correspoinding data
             input_samples = [input[sample] for sample in samples]
             input_sqr_samples = [input_sqr[sample] for sample in samples]
 
+            #Find means
             sample_mean = np.mean(input_samples)
             sample_sqr_mean = np.mean(input_sqr_samples)
-
+            
+            #Find values
             if mode == 'Heat Capacity':
                 value = self.heat_capacity(sample_mean, sample_sqr_mean)
             elif mode == 'Chi':
@@ -203,7 +209,9 @@ class IsingModel(object):
 
             values.append(value)
             values_sqr.append(value**2.0)
-
+            
+            
+        #Find error
         mean = np.mean(values)
         mean_sqr = np.mean(values_sqr)
 
